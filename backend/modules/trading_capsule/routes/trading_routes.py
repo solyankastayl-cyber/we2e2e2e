@@ -1377,3 +1377,11 @@ async def record_pnl(request: RecordPnLRequest):
 
 from ..terminal.terminal_routes import router as terminal_router
 router.include_router(terminal_router)
+
+
+# ===========================================
+# Include Strategy Router (T6)
+# ===========================================
+
+from ..strategy.strategy_routes import router as strategy_router
+router.include_router(strategy_router)
