@@ -126,6 +126,17 @@ async def get_active_strategies():
     }
 
 
+@router.get("/config")
+async def get_strategy_config():
+    """Get strategy runtime configuration"""
+    return {
+        "multi_strategy_mode": strategy_engine.is_multi_strategy(),
+        "registered_strategies": strategy_registry.count(),
+        "active_strategies": len(strategy_state_manager.get_active_ids()),
+        "timestamp": datetime.now(timezone.utc).isoformat()
+    }
+
+
 @router.get("/{strategy_id}")
 async def get_strategy(strategy_id: str):
     """Get strategy by ID"""
