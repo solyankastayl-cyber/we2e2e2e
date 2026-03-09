@@ -199,7 +199,22 @@ class StrategyRuntime:
         strategies_to_process = active_ids
         if not self._multi_strategy_mode:
             # Single strategy mode - use first active
-            strategies_to_process = active_ids[:1]
+            # BUT: route signals to appropriate strategy by type
+            if signal_type == SignalType.MANUAL_SIGNAL:
+                # Manual signals go to MANUAL_SIGNAL_EXECUTOR if active
+                if "MANUAL_SIGNAL_EXECUTOR" in active_ids:
+                    strategies_to_process = ["MANUAL_SIGNAL_EXECUTOR"]
+                else:
+                    strategies_to_process = active_ids[:1]
+            elif signal_type == SignalType.MBRAIN_SIGNAL:
+                # M-Brain signals go to MBRAIN_SIGNAL_ROUTER if active
+                if "MBRAIN_SIGNAL_ROUTER" in active_ids:
+                    strategies_to_process = ["MBRAIN_SIGNAL_ROUTER"]
+                else:
+                    strategies_to_process = active_ids[:1]
+            else:
+                # Default: use first active (usually TA_SIGNAL_FOLLOWER)
+                strategies_to_process = active_ids[:1]
         
         for strategy_id in strategies_to_process:
             strategy = self._registry.get(strategy_id)
