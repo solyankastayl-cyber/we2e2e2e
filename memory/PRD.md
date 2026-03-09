@@ -14,218 +14,138 @@ Quant Research OS - модульная платформа для алгорит�
 | T3 | Execution Decision Layer | ✅ 100% |
 | T4 | Risk Control Layer | ✅ 100% |
 | T5 | Terminal Backend | ✅ 100% |
-| T6 | Strategy Logic Layer | ⏳ Next |
+| T6 | Strategy Runtime Engine | ✅ 100% |
 | T7 | Merge-Ready Contracts | ⏳ Pending |
 
 ### System Progress
 - Research Infrastructure: 100%
 - Backend Architecture: 100%
-- Trading Capsule: 85% (T0-T5 done)
+- Trading Capsule: 95% (T0-T6 done)
 - Terminal Backend: 100%
+- Strategy Runtime: 100%
 
 ## What's Been Implemented
 
-### Trading Capsule T0-T4 (Previously Completed)
-- T0: Contracts & Boundaries (Execution/Trading modes, Core entities)
-- T1: Broker/Account Layer (Connection registry, adapters, health checks)
-- T2: Order Management System (Orders, fills, trades, PnL tracking)
-- T3: Execution Decision Layer (Signal normalization, intent building, preview)
-- T4: Risk Control Layer (Pre-trade validation, exposure, averaging, drawdown)
-
-### Trading Capsule T5: Terminal Backend (2026-03-09)
+### Trading Capsule T6: Strategy Runtime Engine (2026-03-09)
 
 #### Architecture
-T5 is the admin monitoring and control layer. It aggregates data from all subsystems:
+T6 is the strategy management and execution layer. It orchestrates strategies:
 
 ```
-Signal → T3 Execution → T4 Risk → T2 OMS → Broker → Exchange
-                           ↓
-                    T5 Terminal Backend
-                   (monitoring + control)
+Signal (TA/Manual/MBrain)
+↓
+T6 Strategy Runtime
+↓
+Strategy Plugins (evaluate)
+↓
+StrategyAction
+↓
+T3 Execution Layer
+↓
+T4 Risk Control
+↓
+T2 OMS
+↓
+Exchange
 ```
 
-#### Subsystems
+#### Core Components
 
-**1. Account Monitor**
-- AccountOverview entity with equity, balances, status, health
-- Tracks open positions and orders per connection
+**1. StrategyPlugin Interface**
+- `strategy_id`: Unique identifier
+- `on_signal()`: Signal notification
+- `on_market_update()`: Real-time data
+- `on_position_update()`: Position changes  
+- `evaluate()`: Main decision method → StrategyAction
 
-**2. Positions Monitor**
-- PositionView with unrealized PnL, exposure calculations
-- Current price tracking for valuation
+**2. StrategyAction Types**
+- ENTER_LONG / EXIT_LONG
+- ENTER_SHORT / EXIT_SHORT
+- AVERAGE (add to position)
+- HOLD (no action)
+- SCALE_IN / SCALE_OUT
+- FLIP (reverse position)
 
-**3. Orders Monitor**
-- OrderView with fill status, commission, source tracking
-- Filters: open orders, order history
+**3. StrategyContext**
+Contains all data for strategy evaluation:
+- Signal data
+- Market data (asset, price)
+- Account state (equity, cash)
+- Position state (has_position, side, size, pnl)
+- Risk state (daily_pnl, drawdown)
+- Capsule state (paused, kill_switch)
 
-**4. PnL Engine**
-- PnLView with realized/unrealized/total PnL
-- Win rate, avg win/loss, profit factor
-- Daily PnL tracking
+**4. Strategy Registry**
+- `register()` / `unregister()` strategies
+- Metadata storage
+- Strategy lookup
 
-**5. Execution Log**
-- ExecutionLogEntry for all system events
-- Event types: DECISION, INTENT_CREATED, RISK_BLOCKED, ORDER_SENT, ORDER_FILLED, etc.
-- Severity levels: INFO, WARNING, ERROR
+**5. Strategy State Manager**
+- `enable()` / `disable()` strategies
+- `pause()` / `resume()` strategies
+- Track metrics (signals, actions, errors)
+- Auto-disable on error threshold
 
-**6. Risk Monitor**
-- RiskOverview aggregating T4 state
-- Current exposure, drawdown, blocked trades
+**6. Strategy Runtime**
+- Build context from system state
+- Route signals to active strategies
+- Collect actions from strategies
+- Publish events to Event Bus
+- Multi-strategy mode support
 
-**7. Averaging Monitor**
-- AveragingView with steps, capital, price distance
-- Next entry trigger price calculation
+**7. Strategy Engine**
+- Unified interface for all operations
+- Auto-execute actions through Execution Layer
+- Event publishing
 
-**8. System State**
-- TradingSystemState with mode, pause, kill switch status
-- Connection counts, daily stats, uptime
+#### Built-in Strategies
 
-**9. Terminal Actions**
-- Pause/Resume trading
-- Kill switch activate/deactivate
-- Close position
-- Cancel order/all orders
+1. **TA_SIGNAL_FOLLOWER** (enabled by default)
+   - Follows TA signals with confidence filter
+   - BULLISH → ENTER_LONG
+   - BEARISH → EXIT_LONG
+   - Min confidence: 60%
+
+2. **MANUAL_SIGNAL_EXECUTOR** (enabled by default)
+   - Executes manual signals directly
+   - Maps action from signal payload
+
+3. **MBRAIN_SIGNAL_ROUTER** (disabled by default)
+   - Routes M-Brain ensemble signals
+   - Consensus checking
+   - Min confidence: 70%
 
 #### API Endpoints
 
 ```
 # Health
-GET  /api/trading/terminal/health
+GET  /api/trading/strategies/health
 
-# Account Monitor
-GET  /api/trading/terminal/accounts
-GET  /api/trading/terminal/accounts/{connection_id}
+# Strategy Management
+GET  /api/trading/strategies                 - List all strategies
+GET  /api/trading/strategies/active          - Get active strategies
+GET  /api/trading/strategies/config          - Get configuration
+GET  /api/trading/strategies/{id}            - Get strategy by ID
+POST /api/trading/strategies/{id}/enable     - Enable strategy
+POST /api/trading/strategies/{id}/disable    - Disable strategy
+POST /api/trading/strategies/{id}/pause      - Pause strategy
+POST /api/trading/strategies/{id}/resume     - Resume strategy
 
-# Positions Monitor
-GET  /api/trading/terminal/positions
-GET  /api/trading/terminal/positions/{asset}
+# Signal Processing
+POST /api/trading/strategies/signal/ta       - Process TA signal
+POST /api/trading/strategies/signal/manual   - Process manual signal
+POST /api/trading/strategies/signal/mbrain   - Process M-Brain signal
 
-# Orders Monitor
-GET  /api/trading/terminal/orders
-GET  /api/trading/terminal/orders/open
-GET  /api/trading/terminal/orders/history
-
-# PnL Engine
-GET  /api/trading/terminal/pnl
-GET  /api/trading/terminal/pnl/daily
-GET  /api/trading/terminal/pnl/history
-
-# Execution Log
-GET  /api/trading/terminal/logs
-GET  /api/trading/terminal/logs/{asset}
-
-# Risk Monitor
-GET  /api/trading/terminal/risk
-GET  /api/trading/terminal/risk/exposure
-GET  /api/trading/terminal/risk/drawdown
-
-# Averaging Monitor
-GET  /api/trading/terminal/averaging
-GET  /api/trading/terminal/averaging/{asset}
-
-# System State
-GET  /api/trading/terminal/state
-
-# Dashboard (aggregated)
-GET  /api/trading/terminal/dashboard
-
-# Terminal Actions
-POST /api/trading/terminal/actions/pause
-POST /api/trading/terminal/actions/resume
-POST /api/trading/terminal/actions/kill-switch
-POST /api/trading/terminal/actions/deactivate-kill-switch
-POST /api/trading/terminal/actions/close-position
-POST /api/trading/terminal/actions/cancel-order
-POST /api/trading/terminal/actions/cancel-all-orders
-
-# Utility
-POST /api/trading/terminal/prices/update
+# Configuration
+POST /api/trading/strategies/config/mode     - Set multi-strategy mode
 ```
 
-## Complete API Summary
-
-### Capsule Control (/api/trading/*)
-```
-GET  /health, /mode
-POST /mode/select, /pause, /resume, /kill-switch/*
-```
-
-### Connections (T1)
-```
-GET/POST/DELETE /connections/*
-```
-
-### Accounts (T1)
-```
-GET/POST /accounts/*
-```
-
-### Orders (T2)
-```
-POST /orders/place, /orders/cancel
-GET  /orders, /orders/active, /orders/{id}, /orders/health
-```
-
-### Fills & Trades (T2)
-```
-GET /fills, /trades, /trades/open, /trades/{id}, /stats
-```
-
-### Execution (T3)
-```
-GET  /execution/health, /execution/decisions, /execution/results
-POST /execution/signal/ta, /execution/signal/manual
-POST /execution/preview, /execution/execute
-```
-
-### Risk (T4)
-```
-GET  /risk/health, /risk/profile/full, /risk/context/*
-POST /risk/profile/update, /risk/check
-GET/POST /risk/averaging/*, /risk/pnl/*
-GET  /risk/events
-```
-
-### Terminal (T5)
-```
-GET  /terminal/health, /terminal/state, /terminal/dashboard
-GET  /terminal/accounts, /terminal/positions, /terminal/orders
-GET  /terminal/pnl, /terminal/logs, /terminal/risk, /terminal/averaging
-POST /terminal/actions/*
-```
-
-## Next Steps
-
-### T6: Strategy Logic Layer (P1)
-- Bounded averaging / controlled recovery logic
-- Strategy configuration
-- Signal generation rules
-- Entry/exit conditions
-- Position rebuild logic
-- Capital ladder management
-
-### T7: Merge-Ready Integration Contracts (P2)
-- API contracts finalization
-- Interface documentation
-- Integration tests
-- Migration scripts
-- M-Brain interface hooks
-
-## Testing
-
-### Test Coverage
-- T3 Execution Layer: 100% (18/18 tests)
-- T4 Risk Layer: 100% (21/21 tests)
-- T5 Terminal Backend: 100% (36/36 tests)
-- Overall: 100% (95/95 tests)
-
-### Test Files
-- `/app/backend/tests/test_trading_t3_t4.py`
-- `/app/backend/tests/test_trading_terminal_t5.py`
-
-### Test Credentials
-- Mock adapter: api_key must contain 'mock'
-- Example: `{"api_key": "mock_test_123", "api_secret": "mock_secret"}`
+#### Event Bus Events (T6)
+- `strategy_registered` / `strategy_unregistered`
+- `strategy_enabled` / `strategy_disabled`
+- `strategy_paused` / `strategy_resumed`
+- `strategy_action_generated`
+- `strategy_error`
 
 ## File Structure
 
@@ -234,31 +154,45 @@ POST /terminal/actions/*
 ├── __init__.py
 ├── trading_types.py          # Core types (T0)
 ├── broker/                   # T1 Broker/Account Layer
-│   ├── __init__.py
-│   ├── broker_adapters.py
-│   ├── broker_base.py
-│   └── broker_registry.py
 ├── orders/                   # T2 Order Management System
-│   ├── __init__.py
-│   ├── order_service.py
-│   └── order_types.py
 ├── execution/                # T3 Execution Decision Layer
-│   ├── __init__.py
-│   ├── execution_service.py
-│   └── execution_types.py
 ├── risk/                     # T4 Risk Control Layer
-│   ├── __init__.py
-│   ├── risk_service.py
-│   └── risk_types.py
 ├── terminal/                 # T5 Terminal Backend
+├── strategy/                 # T6 Strategy Runtime Engine
 │   ├── __init__.py
-│   ├── terminal_service.py
-│   ├── terminal_routes.py
-│   └── terminal_types.py
+│   ├── strategy_types.py     # StrategyAction, StrategyContext, StrategyPlugin
+│   ├── strategy_registry.py  # Registry for strategy plugins
+│   ├── strategy_state.py     # State manager (enable/disable/pause)
+│   ├── strategy_runtime.py   # Signal routing, context building
+│   ├── strategy_engine.py    # Unified interface
+│   ├── strategy_routes.py    # REST API endpoints
+│   └── builtin_strategies.py # Default strategy implementations
 └── routes/
-    ├── __init__.py
-    └── trading_routes.py     # Main router (includes terminal)
+    └── trading_routes.py     # Main router (includes T5, T6)
 ```
+
+## Next Steps
+
+### T7: Merge-Ready Integration Contracts (P1)
+- API contracts finalization
+- Interface documentation
+- Integration tests
+- Migration scripts
+- M-Brain interface hooks
+- Capsule isolation verification
+
+## Testing
+
+### Test Coverage
+- T3 Execution Layer: 100%
+- T4 Risk Layer: 100%
+- T5 Terminal Backend: 100%
+- T6 Strategy Runtime: 100%
+- Overall: 100%
+
+### Test Credentials
+- Mock adapter: api_key must contain 'mock'
+- Example: `{"api_key": "mock_test_123", "api_secret": "mock_secret"}`
 
 ## Date
 Last Updated: 2026-03-09
