@@ -327,6 +327,25 @@ class SimulationEngine:
         fp = self._determinism_service.get_fingerprint(run_id)
         return fp.to_dict() if fp else None
     
+    def get_fills(self, run_id: str) -> List[Dict[str, Any]]:
+        """Get simulation fills from broker"""
+        broker = simulated_broker_service.get_broker(run_id)
+        if not broker:
+            return []
+        return [f.to_dict() for f in broker.get_fills()]
+    
+    def get_orders(self, run_id: str) -> Dict[str, Any]:
+        """Get simulation orders from broker"""
+        broker = simulated_broker_service.get_broker(run_id)
+        if not broker:
+            return {"open": [], "closed": []}
+        
+        account = broker.get_account_state()
+        return {
+            "open": [o.to_dict() for o in account.open_orders.values()],
+            "closed": [o.to_dict() for o in account.closed_orders]
+        }
+    
     # ===========================================
     # Market Tick Callback
     # ===========================================
@@ -345,6 +364,9 @@ class SimulationEngine:
         if not state:
             return
         
+        # Get broker
+        broker = simulated_broker_service.get_broker(run_id)
+        
         # Update step info
         self._state_service.update_step(
             run_id,
@@ -354,37 +376,141 @@ class SimulationEngine:
         
         # Get current price
         if tick_event.candle:
+            # Update broker with new price (processes pending orders)
+            if broker:
+                broker.update_price(tick_event.asset, tick_event.candle)
+            
             current_price = tick_event.candle.close
             
-            # Update positions with current price
-            positions = self._state_service.get_all_positions(run_id)
-            total_unrealized = 0.0
-            
-            for pos in positions:
-                if pos.asset == tick_event.asset:
-                    self._state_service.update_position_price(run_id, pos.asset, current_price)
-                    updated_pos = self._state_service.get_position(run_id, pos.asset)
-                    if updated_pos:
-                        total_unrealized += updated_pos.unrealized_pnl
-            
-            # Update portfolio
-            equity = state.cash_usd + total_unrealized
-            self._state_service.update_portfolio(
-                run_id,
-                equity_usd=equity,
-                unrealized_pnl_usd=total_unrealized
-            )
+            # Get state from broker
+            if broker:
+                cash = broker.get_cash()
+                equity = broker.get_equity()
+                realized_pnl = broker.get_realized_pnl()
+                unrealized_pnl = broker.get_unrealized_pnl()
+                
+                # Sync broker positions to state service
+                broker_positions = broker.get_all_positions()
+                for pos in broker_positions:
+                    if pos.size > 0:
+                        self._state_service.set_position(
+                            run_id,
+                            pos.asset,
+                            pos.side,
+                            pos.size,
+                            pos.entry_price
+                        )
+                        self._state_service.update_position_price(run_id, pos.asset, pos.current_price)
+                
+                # Update portfolio state
+                self._state_service.update_portfolio(
+                    run_id,
+                    equity_usd=equity,
+                    cash_usd=cash,
+                    realized_pnl_usd=realized_pnl,
+                    unrealized_pnl_usd=unrealized_pnl
+                )
+                
+                # Update counts
+                self._state_service.update_counts(
+                    run_id,
+                    open_positions=len([p for p in broker_positions if p.size > 0]),
+                    open_orders=len(broker.get_open_orders())
+                )
+            else:
+                # Fallback to state service positions
+                positions = self._state_service.get_all_positions(run_id)
+                total_unrealized = 0.0
+                
+                for pos in positions:
+                    if pos.asset == tick_event.asset:
+                        self._state_service.update_position_price(run_id, pos.asset, current_price)
+                        updated_pos = self._state_service.get_position(run_id, pos.asset)
+                        if updated_pos:
+                            total_unrealized += updated_pos.unrealized_pnl
+                
+                equity = state.cash_usd + total_unrealized
+                self._state_service.update_portfolio(
+                    run_id,
+                    equity_usd=equity,
+                    unrealized_pnl_usd=total_unrealized
+                )
             
             # Record equity point
-            self._state_service.record_equity(run_id, tick_event.timestamp, equity)
+            updated_state = self._state_service.get_state(run_id)
+            if updated_state:
+                self._state_service.record_equity(run_id, tick_event.timestamp, updated_state.equity_usd)
         
-        # TODO: Integrate with Strategy Runtime (T6) here
-        # try:
-        #     from ..strategy import strategy_engine
-        #     context = build_context_from_tick(tick_event, state)
-        #     actions = await strategy_engine.process_ta_signal(...)
-        # except ImportError:
-        #     pass
+        # Strategy Runtime Integration
+        await self._process_strategy_signals(run_id, tick_event)
+    
+    async def _process_strategy_signals(
+        self,
+        run_id: str,
+        tick_event: MarketTickEvent
+    ) -> None:
+        """
+        Process signals through Strategy Runtime (T6).
+        
+        This integrates T6 with the simulation engine.
+        """
+        if not tick_event.candle:
+            return
+        
+        broker = simulated_broker_service.get_broker(run_id)
+        if not broker:
+            return
+        
+        try:
+            from ..strategy import strategy_engine
+            from ..strategy.strategy_types import SignalType
+            
+            # Build signal from candle
+            signal_data = {
+                "asset": tick_event.asset,
+                "bias": "NEUTRAL",  # Will be determined by strategy
+                "confidence": 0.5,
+                "price": tick_event.candle.close,
+                "timestamp": tick_event.timestamp
+            }
+            
+            # Process through strategy (without auto-execute since we use simulated broker)
+            result = await strategy_engine.process_ta_signal(signal_data, auto_execute=False)
+            
+            # Execute actions through simulated broker
+            for action in result.get("actions", []):
+                action_type = action.get("action")
+                
+                if action_type == "ENTER_LONG":
+                    # Calculate position size
+                    size_pct = action.get("size_pct") or 0.02  # Default 2%
+                    cash = broker.get_cash()
+                    size = (cash * size_pct) / tick_event.candle.close
+                    
+                    broker.submit_order(
+                        asset=tick_event.asset,
+                        side="BUY",
+                        order_type="MARKET",
+                        quantity=size,
+                        timestamp=tick_event.timestamp
+                    )
+                
+                elif action_type == "EXIT_LONG":
+                    pos = broker.get_position(tick_event.asset)
+                    if pos and pos.size > 0:
+                        broker.submit_order(
+                            asset=tick_event.asset,
+                            side="SELL",
+                            order_type="MARKET",
+                            quantity=pos.size,
+                            timestamp=tick_event.timestamp
+                        )
+                        
+        except ImportError:
+            # Strategy module not available
+            pass
+        except Exception as e:
+            print(f"[SimulationEngine] Strategy processing error: {e}")
     
     # ===========================================
     # Health
@@ -394,7 +520,7 @@ class SimulationEngine:
         """Get engine health"""
         return {
             "enabled": True,
-            "version": "simulation_engine_s1",
+            "version": "simulation_engine_s1.3",
             "status": "ok",
             "runs": self._run_service.count(),
             "active_runs": len(self._run_service.get_active_runs()),
