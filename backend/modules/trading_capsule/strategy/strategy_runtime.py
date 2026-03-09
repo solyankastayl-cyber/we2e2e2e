@@ -97,6 +97,12 @@ class StrategyRuntime:
         context.asset = signal_data.get("asset", "BTC")
         context.current_price = signal_data.get("price", 0.0)
         
+        # Check if position info is passed directly (from simulation)
+        if "has_position" in signal_data:
+            context.has_position = signal_data.get("has_position", False)
+            context.position_side = signal_data.get("position_side")
+            context.position_size = signal_data.get("position_size", 0)
+        
         # Get account state if connection provided
         if connection_id:
             try:
