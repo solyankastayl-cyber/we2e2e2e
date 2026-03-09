@@ -289,17 +289,6 @@ async def process_mbrain_signal(request: MBrainSignalRequest):
 # Configuration
 # ===========================================
 
-@router.get("/config")
-async def get_strategy_config():
-    """Get strategy runtime configuration"""
-    return {
-        "multi_strategy_mode": strategy_engine.is_multi_strategy(),
-        "registered_strategies": strategy_registry.count(),
-        "active_strategies": len(strategy_state_manager.get_active_ids()),
-        "timestamp": datetime.now(timezone.utc).isoformat()
-    }
-
-
 @router.post("/config/mode")
 async def set_strategy_mode(request: StrategyModeRequest):
     """Set multi-strategy mode"""
