@@ -1385,3 +1385,11 @@ router.include_router(terminal_router)
 
 from ..strategy.strategy_routes import router as strategy_router
 router.include_router(strategy_router)
+
+
+# ===========================================
+# Include Simulation Router (S1)
+# ===========================================
+
+from ..simulation.simulation_routes import router as simulation_router
+router.include_router(simulation_router)
