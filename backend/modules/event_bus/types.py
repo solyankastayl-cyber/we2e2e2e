@@ -120,6 +120,16 @@ EVENT_CATEGORY_MAP: Dict[EventType, EventCategory] = {
     EventType.GAP_EVENT_DETECTED: EventCategory.EXECUTION,
     EventType.FILL_REJECTED: EventCategory.EXECUTION,
     
+    # Strategy (T6)
+    EventType.STRATEGY_REGISTERED: EventCategory.EXECUTION,
+    EventType.STRATEGY_UNREGISTERED: EventCategory.EXECUTION,
+    EventType.STRATEGY_ENABLED: EventCategory.EXECUTION,
+    EventType.STRATEGY_DISABLED: EventCategory.EXECUTION,
+    EventType.STRATEGY_PAUSED: EventCategory.EXECUTION,
+    EventType.STRATEGY_RESUMED: EventCategory.EXECUTION,
+    EventType.STRATEGY_ACTION_GENERATED: EventCategory.EXECUTION,
+    EventType.STRATEGY_ERROR: EventCategory.EXECUTION,
+    
     # Governance
     EventType.POLICY_UPDATED: EventCategory.GOVERNANCE,
     EventType.DATASET_REGISTERED: EventCategory.GOVERNANCE,
