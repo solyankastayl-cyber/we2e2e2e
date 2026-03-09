@@ -210,12 +210,16 @@ class SimulationEngine:
             # Get final state
             state = self._state_service.get_state(run_id)
             
-            # Complete run
+            # Normalize trades (S1.4A)
+            trades = trade_normalizer_service.normalize_from_broker(run_id, close_open_positions=True)
+            trade_stats = trade_normalizer_service.get_trade_stats(run_id)
+            
+            # Complete run with accurate trade count
             if state:
                 self._run_service.complete_run(
                     run_id,
                     final_equity_usd=state.equity_usd,
-                    total_trades=state.open_positions  # TODO: track trades
+                    total_trades=len(trades)
                 )
             
             run = self._run_service.get_run(run_id)
@@ -224,7 +228,8 @@ class SimulationEngine:
                 "success": True,
                 "run": run.to_dict() if run else None,
                 "state": state.to_dict() if state else None,
-                "total_steps": result.get("total_steps", 0)
+                "total_steps": result.get("total_steps", 0),
+                "trade_stats": trade_stats.to_dict()
             }
         
         return result
