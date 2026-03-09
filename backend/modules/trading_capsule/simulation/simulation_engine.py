@@ -128,6 +128,9 @@ class SimulationEngine:
         capital = initial_capital_usd or get_capital_for_profile(capital_profile)
         self._state_service.create_state(run.run_id, capital)
         
+        # Create simulated broker
+        simulated_broker_service.create_broker(run.run_id, capital)
+        
         # Build fingerprint
         fingerprint = self._determinism_service.build_fingerprint(
             run,
