@@ -491,7 +491,16 @@ class SimulationEngine:
                 "timestamp": tick_event.timestamp
             }
             
+            # Get current position from broker to pass to strategy
+            broker_position = broker.get_position(tick_event.asset)
+            has_position = broker_position is not None and broker_position.size > 0
+            
             # Process through strategy (without auto-execute since we use simulated broker)
+            # We pass position info via signal_data since we don't have a connection_id
+            signal_data["has_position"] = has_position
+            signal_data["position_side"] = broker_position.side if has_position else None
+            signal_data["position_size"] = broker_position.size if has_position else 0
+            
             result = await strategy_engine.process_ta_signal(signal_data, auto_execute=False)
             
             # Execute actions through simulated broker
