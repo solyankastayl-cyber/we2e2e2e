@@ -9,6 +9,7 @@ Combines:
 - State Manager (S1.1)
 - Determinism Guard (S1.1)
 - Market Replay (S1.2)
+- Simulated Broker (S1.3)
 
 Pipeline:
     Market Replay
@@ -52,6 +53,8 @@ from .replay import (
     replay_cursor_service,
     replay_driver_service
 )
+
+from .broker import simulated_broker_service
 
 
 class SimulationEngine:
