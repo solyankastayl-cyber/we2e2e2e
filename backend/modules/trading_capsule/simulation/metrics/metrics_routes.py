@@ -1,15 +1,20 @@
 """
-Metrics Routes (S1.4A)
-======================
+Metrics Routes (S1.4A/S1.4B)
+============================
 
-REST API for trade normalization and metrics.
+REST API for trade normalization and performance metrics.
 
 Endpoints:
 
-GET /api/trading/simulation/runs/{runId}/trades        - Get closed trades
-GET /api/trading/simulation/runs/{runId}/trades/stats  - Get trade statistics
-GET /api/trading/simulation/runs/{runId}/trades/{id}   - Get specific trade
+# Trade Normalization (S1.4A)
+GET  /api/trading/simulation/runs/{runId}/trades         - Get closed trades
+GET  /api/trading/simulation/runs/{runId}/trades/stats   - Get trade statistics
+GET  /api/trading/simulation/runs/{runId}/trades/{id}    - Get specific trade
 POST /api/trading/simulation/runs/{runId}/trades/normalize - Trigger normalization
+
+# Performance Metrics (S1.4B)
+GET /api/trading/simulation/runs/{runId}/performance     - Get performance metrics
+GET /api/trading/simulation/runs/{runId}/performance/curve - Get processed equity curve
 """
 
 from fastapi import APIRouter, HTTPException, Query
@@ -17,6 +22,8 @@ from typing import Optional, List
 
 from .trade_types import ClosedTrade, TradeStats
 from .trade_normalizer_service import trade_normalizer_service
+from .performance_metrics_service import performance_metrics_service
+from .performance_types import MetricsConfig
 
 
 router = APIRouter(tags=["Trade Metrics (S1.4)"])
