@@ -326,3 +326,11 @@ async def get_fingerprint(run_id: str):
         raise HTTPException(status_code=404, detail="Fingerprint not found")
     
     return fingerprint
+
+
+# ===========================================
+# Include Metrics Router (S1.4)
+# ===========================================
+
+from .metrics.metrics_routes import router as metrics_router
+router.include_router(metrics_router)
