@@ -63,6 +63,16 @@ class EventType(str, Enum):
     GAP_EVENT_DETECTED = "gap_event_detected"
     FILL_REJECTED = "fill_rejected"
     
+    # Strategy events (T6)
+    STRATEGY_REGISTERED = "strategy_registered"
+    STRATEGY_UNREGISTERED = "strategy_unregistered"
+    STRATEGY_ENABLED = "strategy_enabled"
+    STRATEGY_DISABLED = "strategy_disabled"
+    STRATEGY_PAUSED = "strategy_paused"
+    STRATEGY_RESUMED = "strategy_resumed"
+    STRATEGY_ACTION_GENERATED = "strategy_action_generated"
+    STRATEGY_ERROR = "strategy_error"
+    
     # Governance events
     POLICY_UPDATED = "policy_updated"
     DATASET_REGISTERED = "dataset_registered"
