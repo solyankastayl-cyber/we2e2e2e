@@ -290,6 +290,25 @@ async def get_equity_history(run_id: str):
     }
 
 
+@router.get("/runs/{run_id}/fills")
+async def get_simulation_fills(run_id: str):
+    """Get simulation fills (orders that were executed)"""
+    fills = simulation_engine.get_fills(run_id)
+    
+    return {
+        "fills": fills,
+        "count": len(fills)
+    }
+
+
+@router.get("/runs/{run_id}/orders")
+async def get_simulation_orders(run_id: str):
+    """Get simulation orders (open and closed)"""
+    orders = simulation_engine.get_orders(run_id)
+    
+    return orders
+
+
 # ===========================================
 # Determinism
 # ===========================================
