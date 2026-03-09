@@ -115,3 +115,104 @@ async def get_trade(run_id: str, trade_id: str):
         raise HTTPException(status_code=404, detail="Trade not found")
     
     return trade.to_dict()
+
+
+# ===========================================
+# Performance Metrics (S1.4B)
+# ===========================================
+
+@router.get("/runs/{run_id}/performance")
+async def get_performance_metrics(
+    run_id: str,
+    initial_capital: Optional[float] = Query(None, description="Override initial capital"),
+    risk_free_rate: float = Query(0.0, description="Risk-free rate (annualized)"),
+    trading_days: int = Query(365, description="Trading days per year (365 for crypto)")
+):
+    """
+    Get performance metrics for simulation run.
+    
+    Includes:
+    - Total Return (%)
+    - Annual Return (CAGR)
+    - Sharpe Ratio
+    - Sortino Ratio
+    - Volatility (annualized)
+    """
+    config = MetricsConfig(
+        risk_free_rate=risk_free_rate,
+        trading_days_per_year=trading_days
+    )
+    
+    metrics = performance_metrics_service.calculate_metrics(
+        run_id,
+        initial_capital=initial_capital,
+        config=config
+    )
+    
+    return {
+        "run_id": run_id,
+        "metrics": metrics.to_dict()
+    }
+
+
+@router.get("/runs/{run_id}/performance/curve")
+async def get_performance_curve(
+    run_id: str,
+    initial_capital: Optional[float] = Query(None, description="Override initial capital")
+):
+    """
+    Get processed equity curve with returns and drawdowns.
+    
+    Each point includes:
+    - Equity value
+    - Period return %
+    - Cumulative return %
+    - Current drawdown %
+    """
+    curve = performance_metrics_service.get_processed_equity_curve(
+        run_id,
+        initial_capital=initial_capital
+    )
+    
+    if not curve:
+        raise HTTPException(status_code=404, detail="No equity data available")
+    
+    return {
+        "run_id": run_id,
+        "curve": [p.to_dict() for p in curve],
+        "points": len(curve)
+    }
+
+
+@router.get("/runs/{run_id}/performance/summary")
+async def get_performance_summary(
+    run_id: str,
+    initial_capital: Optional[float] = Query(None)
+):
+    """
+    Get combined performance summary.
+    
+    Includes both trade stats and performance metrics.
+    """
+    # Get trade stats
+    trade_stats = trade_normalizer_service.get_trade_stats(run_id)
+    
+    # Get performance metrics
+    perf_metrics = performance_metrics_service.calculate_metrics(
+        run_id,
+        initial_capital=initial_capital
+    )
+    
+    return {
+        "run_id": run_id,
+        "trade_stats": trade_stats.to_dict(),
+        "performance": perf_metrics.to_dict(),
+        "summary": {
+            "total_trades": trade_stats.total_trades,
+            "win_rate": trade_stats.win_rate,
+            "profit_factor": trade_stats.profit_factor,
+            "total_return_pct": perf_metrics.total_return_pct,
+            "sharpe_ratio": perf_metrics.sharpe_ratio,
+            "sortino_ratio": perf_metrics.sortino_ratio
+        }
+    }
