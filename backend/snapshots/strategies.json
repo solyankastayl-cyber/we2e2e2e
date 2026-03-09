@@ -1,0 +1,66 @@
+[
+  {
+    "id": "MTF_BREAKOUT",
+    "status": "APPROVED",
+    "wr": 0.64,
+    "pf": 2.1
+  },
+  {
+    "id": "DOUBLE_BOTTOM",
+    "status": "APPROVED",
+    "wr": 0.66,
+    "pf": 2.3
+  },
+  {
+    "id": "DOUBLE_TOP",
+    "status": "APPROVED",
+    "wr": 0.63,
+    "pf": 2.0
+  },
+  {
+    "id": "CHANNEL_BREAKOUT",
+    "status": "APPROVED",
+    "wr": 0.58,
+    "pf": 1.8
+  },
+  {
+    "id": "MOMENTUM_CONTINUATION",
+    "status": "APPROVED",
+    "wr": 0.62,
+    "pf": 1.9
+  },
+  {
+    "id": "HEAD_SHOULDERS",
+    "status": "LIMITED",
+    "wr": 0.52,
+    "pf": 1.25
+  },
+  {
+    "id": "HARMONIC_ABCD",
+    "status": "LIMITED",
+    "wr": 0.54,
+    "pf": 1.4
+  },
+  {
+    "id": "WEDGE_RISING",
+    "status": "LIMITED",
+    "wr": 0.51,
+    "pf": 1.15
+  },
+  {
+    "id": "WEDGE_FALLING",
+    "status": "LIMITED",
+    "wr": 0.53,
+    "pf": 1.2
+  },
+  {
+    "id": "LIQUIDITY_SWEEP",
+    "status": "DEPRECATED",
+    "reason": "WR 37-46%"
+  },
+  {
+    "id": "RANGE_REVERSAL",
+    "status": "DEPRECATED",
+    "reason": "WR 34-38%"
+  }
+]

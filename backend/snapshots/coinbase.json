@@ -1,0 +1,25 @@
+{
+  "provider": "coinbase",
+  "baseUrl": "https://api.exchange.coinbase.com",
+  "endpoints": {
+    "candles": "/products/{product_id}/candles",
+    "ticker": "/products/{product_id}/ticker",
+    "products": "/products"
+  },
+  "supportedPairs": [
+    "BTC-USD",
+    "ETH-USD",
+    "SOL-USD",
+    "BTC-USDT",
+    "ETH-USDT",
+    "SOL-USDT"
+  ],
+  "granularities": {
+    "1m": 60,
+    "5m": 300,
+    "15m": 900,
+    "1h": 3600,
+    "4h": 14400,
+    "1d": 86400
+  }
+}

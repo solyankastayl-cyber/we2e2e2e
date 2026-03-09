@@ -1,0 +1,32 @@
+{
+  "enabled": true,
+  "version": "phase8.6",
+  "volatilityFilter": {
+    "enabled": true,
+    "atrMultiplier": 0.8,
+    "atrPeriod": 14,
+    "smaPeriod": 14
+  },
+  "trendAlignment": {
+    "enabled": true,
+    "emaShortPeriod": 50,
+    "emaLongPeriod": 200,
+    "requireBothAligned": false
+  },
+  "volumeBreakout": {
+    "enabled": true,
+    "volumeMultiplier": 1.4,
+    "smaPeriod": 20
+  },
+  "atrRiskManagement": {
+    "enabled": true,
+    "stopLossATR": 1.5,
+    "takeProfitATR": 2.5
+  },
+  "disabledStrategies": [
+    "LIQUIDITY_SWEEP",
+    "LIQUIDITY_SWEEP_HIGH",
+    "LIQUIDITY_SWEEP_LOW",
+    "RANGE_REVERSAL"
+  ]
+}

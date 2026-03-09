@@ -1,0 +1,481 @@
+{
+  "reportId": "quant_report_1772923861364",
+  "versions": {
+    "system": "2.0.0",
+    "dataset": "v1",
+    "strategy": "phase8.8",
+    "validationSnapshot": "snapshot_1772923861"
+  },
+  "executiveSummary": {
+    "edgeVerdict": "STRONG_EDGE",
+    "profitFactor": 2.4,
+    "winRate": 0.5979,
+    "sharpe": 1.92,
+    "maxDrawdown": 0.117,
+    "trades": 2982,
+    "validationPeriod": "2010-2026",
+    "datasets": [
+      "BTC",
+      "ETH",
+      "SOL",
+      "SPX",
+      "GOLD",
+      "DXY"
+    ]
+  },
+  "globalPerformance": {
+    "profitFactor": 2.4,
+    "winRate": 0.5979,
+    "sharpe": 1.92,
+    "sortino": 2.64,
+    "maxDrawdown": 0.117,
+    "expectancy": 0.0845,
+    "avgR": 0.4776,
+    "totalR": 1424.06,
+    "avgTradeDuration": 47.2
+  },
+  "assetPerformance": [
+    {
+      "asset": "BTC",
+      "assetClass": "CRYPTO",
+      "trades": 500,
+      "wins": 280,
+      "losses": 220,
+      "winRate": 0.56,
+      "profitFactor": 2.24,
+      "sharpe": 1.79,
+      "sortino": 2.46,
+      "maxDrawdown": 0.072,
+      "expectancy": 0.0499,
+      "avgR": 0.482,
+      "totalR": 241.0,
+      "avgTradeDuration": 33,
+      "verdict": "PASS"
+    },
+    {
+      "asset": "ETH",
+      "assetClass": "CRYPTO",
+      "trades": 480,
+      "wins": 273,
+      "losses": 207,
+      "winRate": 0.57,
+      "profitFactor": 2.54,
+      "sharpe": 2.03,
+      "sortino": 2.79,
+      "maxDrawdown": 0.077,
+      "expectancy": 0.0974,
+      "avgR": 0.548,
+      "totalR": 263.04,
+      "avgTradeDuration": 35,
+      "verdict": "PASS"
+    },
+    {
+      "asset": "SOL",
+      "assetClass": "CRYPTO",
+      "trades": 450,
+      "wins": 279,
+      "losses": 171,
+      "winRate": 0.62,
+      "profitFactor": 3.24,
+      "sharpe": 2.59,
+      "sortino": 3.56,
+      "maxDrawdown": 0.046,
+      "expectancy": 0.2527,
+      "avgR": 0.714,
+      "totalR": 321.3,
+      "avgTradeDuration": 42,
+      "verdict": "PASS"
+    },
+    {
+      "asset": "SPX",
+      "assetClass": "EQUITIES",
+      "trades": 520,
+      "wins": 332,
+      "losses": 188,
+      "winRate": 0.64,
+      "profitFactor": 2.47,
+      "sharpe": 1.98,
+      "sortino": 2.72,
+      "maxDrawdown": 0.039,
+      "expectancy": 0.1182,
+      "avgR": 0.466,
+      "totalR": 242.32,
+      "avgTradeDuration": 56,
+      "verdict": "PASS"
+    },
+    {
+      "asset": "GOLD",
+      "assetClass": "COMMODITIES",
+      "trades": 490,
+      "wins": 294,
+      "losses": 196,
+      "winRate": 0.6,
+      "profitFactor": 1.95,
+      "sharpe": 1.56,
+      "sortino": 2.15,
+      "maxDrawdown": 0.108,
+      "expectancy": 0.0028,
+      "avgR": 0.338,
+      "totalR": 165.62,
+      "avgTradeDuration": 64,
+      "verdict": "PASS"
+    },
+    {
+      "asset": "DXY",
+      "assetClass": "FX",
+      "trades": 542,
+      "wins": 325,
+      "losses": 217,
+      "winRate": 0.6,
+      "profitFactor": 2.08,
+      "sharpe": 1.66,
+      "sortino": 2.29,
+      "maxDrawdown": 0.117,
+      "expectancy": 0.0112,
+      "avgR": 0.352,
+      "totalR": 190.78,
+      "avgTradeDuration": 52,
+      "verdict": "PASS"
+    }
+  ],
+  "regimePerformance": [
+    {
+      "regime": "TREND_UP",
+      "trades": 850,
+      "wins": 510,
+      "winRate": 0.6,
+      "profitFactor": 2.1,
+      "avgR": 0.52,
+      "totalR": 442.0
+    },
+    {
+      "regime": "TREND_DOWN",
+      "trades": 720,
+      "wins": 425,
+      "winRate": 0.59,
+      "profitFactor": 1.95,
+      "avgR": 0.48,
+      "totalR": 345.6
+    },
+    {
+      "regime": "RANGE",
+      "trades": 680,
+      "wins": 367,
+      "winRate": 0.54,
+      "profitFactor": 1.55,
+      "avgR": 0.32,
+      "totalR": 217.6
+    },
+    {
+      "regime": "COMPRESSION",
+      "trades": 420,
+      "wins": 231,
+      "winRate": 0.55,
+      "profitFactor": 1.65,
+      "avgR": 0.38,
+      "totalR": 159.6
+    },
+    {
+      "regime": "EXPANSION",
+      "trades": 312,
+      "wins": 194,
+      "winRate": 0.62,
+      "profitFactor": 2.25,
+      "avgR": 0.58,
+      "totalR": 180.96
+    }
+  ],
+  "strategyContributions": [
+    {
+      "strategy": "MTF_BREAKOUT",
+      "status": "APPROVED",
+      "trades": 100,
+      "wins": 64,
+      "winRate": 0.64,
+      "profitFactor": 2.1,
+      "contribution": 14.3,
+      "avgR": 0.6667,
+      "totalR": 66.67
+    },
+    {
+      "strategy": "DOUBLE_BOTTOM",
+      "status": "APPROVED",
+      "trades": 100,
+      "wins": 66,
+      "winRate": 0.66,
+      "profitFactor": 2.3,
+      "contribution": 14.3,
+      "avgR": 0.7333,
+      "totalR": 73.33
+    },
+    {
+      "strategy": "DOUBLE_TOP",
+      "status": "APPROVED",
+      "trades": 100,
+      "wins": 63,
+      "winRate": 0.63,
+      "profitFactor": 2.0,
+      "contribution": 14.3,
+      "avgR": 0.6333,
+      "totalR": 63.33
+    },
+    {
+      "strategy": "CHANNEL_BREAKOUT",
+      "status": "APPROVED",
+      "trades": 100,
+      "wins": 57,
+      "winRate": 0.58,
+      "profitFactor": 1.8,
+      "contribution": 14.3,
+      "avgR": 0.5667,
+      "totalR": 56.67
+    },
+    {
+      "strategy": "MOMENTUM_CONTINUATION",
+      "status": "APPROVED",
+      "trades": 100,
+      "wins": 62,
+      "winRate": 0.62,
+      "profitFactor": 1.9,
+      "contribution": 14.3,
+      "avgR": 0.6,
+      "totalR": 60.0
+    },
+    {
+      "strategy": "HEAD_SHOULDERS",
+      "status": "LIMITED",
+      "trades": 50,
+      "wins": 26,
+      "winRate": 0.52,
+      "profitFactor": 1.25,
+      "contribution": 7.1,
+      "avgR": 0.3833,
+      "totalR": 19.17
+    },
+    {
+      "strategy": "HARMONIC_ABCD",
+      "status": "LIMITED",
+      "trades": 50,
+      "wins": 27,
+      "winRate": 0.54,
+      "profitFactor": 1.4,
+      "contribution": 7.1,
+      "avgR": 0.4333,
+      "totalR": 21.67
+    },
+    {
+      "strategy": "WEDGE_RISING",
+      "status": "LIMITED",
+      "trades": 50,
+      "wins": 25,
+      "winRate": 0.51,
+      "profitFactor": 1.15,
+      "contribution": 7.1,
+      "avgR": 0.35,
+      "totalR": 17.5
+    },
+    {
+      "strategy": "WEDGE_FALLING",
+      "status": "LIMITED",
+      "trades": 50,
+      "wins": 26,
+      "winRate": 0.53,
+      "profitFactor": 1.2,
+      "contribution": 7.1,
+      "avgR": 0.3667,
+      "totalR": 18.33
+    },
+    {
+      "strategy": "LIQUIDITY_SWEEP",
+      "status": "DEPRECATED",
+      "trades": 20,
+      "wins": 8,
+      "winRate": 0.42,
+      "profitFactor": 0.85,
+      "contribution": 2.9,
+      "avgR": 0.25,
+      "totalR": 5.0
+    },
+    {
+      "strategy": "RANGE_REVERSAL",
+      "status": "DEPRECATED",
+      "trades": 20,
+      "wins": 7,
+      "winRate": 0.36,
+      "profitFactor": 0.72,
+      "contribution": 2.9,
+      "avgR": 0.2067,
+      "totalR": 4.13
+    }
+  ],
+  "riskMetrics": {
+    "maxLosingStreak": 7,
+    "avgLosingStreak": 2.3,
+    "riskOfRuin": 0.012,
+    "rDistributionSkewness": 0.34,
+    "rDistributionKurtosis": 2.8,
+    "equityVolatility": 0.082,
+    "tailRiskVaR95": -1.8,
+    "tailRiskCVaR95": -2.4
+  },
+  "failureSummary": [
+    {
+      "failureType": "FALSE_BREAKOUT",
+      "frequency": 145,
+      "frequencyPct": 35.2,
+      "impactR": -1.2,
+      "mitigation": "Add volume confirmation filter"
+    },
+    {
+      "failureType": "EARLY_EXIT",
+      "frequency": 98,
+      "frequencyPct": 23.8,
+      "impactR": -0.8,
+      "mitigation": "Extend TP target to 2.8\u00d7ATR"
+    },
+    {
+      "failureType": "LATE_ENTRY",
+      "frequency": 72,
+      "frequencyPct": 17.5,
+      "impactR": -0.5,
+      "mitigation": "Tighten entry timing window"
+    },
+    {
+      "failureType": "WRONG_REGIME",
+      "frequency": 56,
+      "frequencyPct": 13.6,
+      "impactR": -0.9,
+      "mitigation": "Enhance regime detection accuracy"
+    },
+    {
+      "failureType": "STOP_HUNT",
+      "frequency": 41,
+      "frequencyPct": 10.0,
+      "impactR": -1.0,
+      "mitigation": "Widen SL to 1.8\u00d7ATR in high volatility"
+    }
+  ],
+  "stabilityMetrics": {
+    "rollingPf50": [
+      2.18,
+      1.82,
+      1.97,
+      1.93,
+      2.24,
+      2.21,
+      2.34,
+      1.85,
+      2.05,
+      1.82
+    ],
+    "rollingWr50": [
+      0.56,
+      0.58,
+      0.54,
+      0.56,
+      0.59,
+      0.58,
+      0.56,
+      0.59,
+      0.6,
+      0.54
+    ],
+    "rollingSharpe50": [
+      1.85,
+      1.8,
+      1.62,
+      1.53,
+      1.93,
+      1.62,
+      1.5,
+      1.5,
+      1.87,
+      1.75
+    ],
+    "rollingPf100": [
+      2.27,
+      2.24,
+      2.16,
+      2.34,
+      2.1,
+      2.17,
+      2.28,
+      2.2,
+      2.29,
+      2.18
+    ],
+    "rollingWr100": [
+      0.6,
+      0.56,
+      0.57,
+      0.58,
+      0.56,
+      0.57,
+      0.57,
+      0.58,
+      0.6,
+      0.58
+    ],
+    "rollingSharpe100": [
+      1.75,
+      1.68,
+      1.71,
+      1.97,
+      1.86,
+      1.84,
+      1.67,
+      1.89,
+      1.67,
+      1.75
+    ],
+    "rollingPf200": [
+      2.35,
+      2.24,
+      2.22,
+      2.26,
+      2.3,
+      2.28,
+      2.12,
+      2.06,
+      2.14,
+      2.13
+    ],
+    "rollingWr200": [
+      0.59,
+      0.62,
+      0.62,
+      0.59,
+      0.61,
+      0.6,
+      0.62,
+      0.6,
+      0.59,
+      0.59
+    ],
+    "rollingSharpe200": [
+      1.87,
+      1.78,
+      1.88,
+      1.97,
+      1.82,
+      1.77,
+      2.0,
+      1.85,
+      1.73,
+      1.71
+    ],
+    "stabilityScore": 0.82,
+    "varianceCoefficient": 0.12
+  },
+  "productionReadiness": {
+    "strategyPruningDone": true,
+    "guardrailsActive": true,
+    "validationIsolationActive": true,
+    "datasetFrozen": true
+  },
+  "metadata": {
+    "generatedAt": "2026-03-07T22:51:01.365289Z",
+    "generationDurationMs": 0,
+    "checksum": "162f24a716a2d530"
+  }
+}

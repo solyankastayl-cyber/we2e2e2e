@@ -1,0 +1,113 @@
+_meta:
+  created_at: 1772927716987
+  last_modified: 1772927754920
+  version: 2
+edge_guard_policies:
+  decay_thresholds:
+    pf_degraded: -0.15
+    pf_disabled: -0.4
+    pf_watch: -0.25
+  drift_thresholds:
+    atr_shift_moderate: 0.2
+    trend_change_moderate: 0.15
+  overfit_thresholds:
+    regime_concentration_high: 0.8
+    train_test_divergence_high: 0.25
+    train_test_divergence_medium: 0.15
+  version: 1.0.0
+portfolio_policies:
+  correlation_limits:
+    avg_threshold: 0.5
+    budget: 0.65
+    max_pairwise: 0.7
+  exposure_limits:
+    max_gross: 1.5
+    max_net: 1.0
+    max_per_asset: 0.3
+    max_per_family: 0.4
+    max_per_strategy: 0.2
+  kill_switch:
+    consecutive_losses: 10
+    correlation_spike: 0.85
+    max_drawdown: 0.2
+    volatility_multiplier: 3.0
+  risk_modes:
+    caution:
+      exposure_mult: 0.7
+    halt:
+      exposure_mult: 0.0
+    normal:
+      exposure_mult: 1.0
+    safe:
+      exposure_mult: 0.3
+  version: 1.0.0
+risk_policies:
+  daily_loss_limit: 0.05
+  max_portfolio_risk: 0.02
+  max_single_trade_risk: 0.01
+  monthly_loss_limit: 0.15
+  position_sizing:
+    atr_multiplier: 2.0
+    method: ATR
+  version: 1.0.0
+  weekly_loss_limit: 0.1
+self_healing_policies:
+  enabled: true
+  health_thresholds:
+    critical: 0.25
+    degraded: 0.4
+    healthy: 0.8
+    warning: 0.6
+  mode: MANUAL
+  recovery_rules:
+    grace_period_days: 14
+    min_pf: 1.2
+    min_sharpe: 0.8
+    min_trades: 50
+  rolling_windows:
+    long: 400
+    mid: 150
+    short: 50
+  version: 1.0.0
+  weight_adjustment:
+    critical: 0.0
+    degraded: 0.4
+    healthy: 1.0
+    warning: 0.75
+  weight_limits:
+    max_daily_change: 0.1
+    max_weekly_change: 0.25
+strategy_policies:
+  demotion_criteria:
+    consecutive_warning_windows: 2
+    min_pf_decline: 0.15
+  family_budgets:
+    breakout_family: 0.35
+    continuation_family: 0.3
+    experimental_family: 0.05
+    pattern_family: 0.1
+    reversal_family: 0.2
+  max_concurrent_trades_per_strategy: 5
+  max_daily_trades_per_strategy: 10
+  max_family_exposure: 0.35
+  max_strategy_exposure: 0.15
+  promotion_criteria:
+    max_dd: 0.25
+    min_pf: 1.3
+    min_sharpe: 0.8
+    min_trades: 200
+  version: 1.0.0
+validation_policies:
+  regression_thresholds:
+    dd_increase: 0.05
+    pf_decline: 0.1
+    wr_decline: 0.03
+  release_criteria:
+    guardrails_required: true
+    isolation_required: true
+    max_dd: 0.2
+    min_pf: 1.5
+    min_sharpe: 1.0
+    min_trades: 200
+    min_wr: 0.52
+  version: 1.0.0

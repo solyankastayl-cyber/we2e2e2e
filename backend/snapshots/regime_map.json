@@ -1,0 +1,65 @@
+{
+  "MTF_BREAKOUT": [
+    "ON",
+    "ON",
+    "WATCH",
+    "WATCH",
+    "ON"
+  ],
+  "DOUBLE_BOTTOM": [
+    "ON",
+    "LIMITED",
+    "ON",
+    "LIMITED",
+    "ON"
+  ],
+  "DOUBLE_TOP": [
+    "WATCH",
+    "ON",
+    "ON",
+    "LIMITED",
+    "ON"
+  ],
+  "CHANNEL_BREAKOUT": [
+    "ON",
+    "ON",
+    "OFF",
+    "LIMITED",
+    "ON"
+  ],
+  "MOMENTUM_CONT": [
+    "ON",
+    "ON",
+    "OFF",
+    "OFF",
+    "ON"
+  ],
+  "HEAD_SHOULDERS": [
+    "OFF",
+    "ON",
+    "WATCH",
+    "WATCH",
+    "ON"
+  ],
+  "HARMONIC_ABCD": [
+    "ON",
+    "LIMITED",
+    "ON",
+    "LIMITED",
+    "LIMITED"
+  ],
+  "WEDGE_RISING": [
+    "OFF",
+    "ON",
+    "WATCH",
+    "LIMITED",
+    "LIMITED"
+  ],
+  "WEDGE_FALLING": [
+    "ON",
+    "OFF",
+    "WATCH",
+    "LIMITED",
+    "ON"
+  ]
+}

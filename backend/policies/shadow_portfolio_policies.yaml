@@ -1,0 +1,31 @@
+shadow_portfolio:
+  initial_capital: 100000
+  max_strategies: 10
+  max_position_per_strategy: 0.10
+  max_total_exposure: 1.0
+
+  risk:
+    stop_loss_pct: 0.02
+    take_profit_pct: 0.04
+
+  drawdown_limits:
+    warning: 0.10
+    stress: 0.20
+    crisis: 0.30
+
+  regime_exposure:
+    NORMAL: 1.0
+    ELEVATED: 0.7
+    STRESS: 0.4
+    CRISIS: 0.1
+
+  allocation:
+    equal_weight: true
+    min_strategy_weight: 0.05
+    max_strategy_weight: 0.30
+
+  governance:
+    pause_negative_pnl_in_stress: true
+    resume_on_normal: true
+    min_trades_for_governance: 3
+    max_holding_bars: 30

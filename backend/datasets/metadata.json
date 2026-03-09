@@ -1,0 +1,36 @@
+{
+  "version": "v1",
+  "created_at": "2026-03-07T22:26:31.155894+00:00",
+  "datasets": {
+    "btc_daily_v1": {
+      "symbol": "BTC",
+      "source": "Merged: BTC_legacy_2010 + BTCUSD_daily",
+      "file": "btc_daily_v1.csv",
+      "rows": 5692,
+      "start_date": "2010-07-18",
+      "end_date": "2026-02-15",
+      "checksum": "c4abe092038b209ec730f85978b0065f7f4c740ab7e2fb665c70f681982a9c3d",
+      "created_at": "2026-03-07T22:26:31.165172+00:00"
+    },
+    "spx_daily_v1": {
+      "symbol": "SPX",
+      "source": "Source: spx_stooq_seed.csv",
+      "file": "spx_daily_v1.csv",
+      "rows": 19242,
+      "start_date": "1950-01-03",
+      "end_date": "2026-02-20",
+      "checksum": "29ac5d674b9e3ab64bd09d94cf6af03bdbd89121e63826d48a8efe96cc4ab9d3",
+      "created_at": "2026-03-07T22:26:31.734706+00:00"
+    },
+    "dxy_daily_v1": {
+      "symbol": "DXY",
+      "source": "Source: dxy_extended_seed.csv",
+      "file": "dxy_daily_v1.csv",
+      "rows": 13366,
+      "start_date": "1973-01-02",
+      "end_date": "2026-02-20",
+      "checksum": "5ed3c4ca4803e03915b1ee62300d48b4f0d0e8a4517794b0d9e199c7f10a28a5",
+      "created_at": "2026-03-07T22:26:32.155494+00:00"
+    }
+  }
+}
