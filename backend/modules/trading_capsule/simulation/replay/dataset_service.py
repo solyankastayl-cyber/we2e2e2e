@@ -16,7 +16,7 @@ import threading
 import hashlib
 import json
 
-from .simulation_types import (
+from ..simulation_types import (
     MarketCandle,
     MarketDataset,
     Timeframe
