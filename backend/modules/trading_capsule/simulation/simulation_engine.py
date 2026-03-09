@@ -55,6 +55,7 @@ from .replay import (
 )
 
 from .broker import simulated_broker_service
+from .metrics import trade_normalizer_service
 
 
 class SimulationEngine:
