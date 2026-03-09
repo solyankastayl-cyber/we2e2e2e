@@ -23,8 +23,52 @@ router = APIRouter(tags=["Trade Metrics (S1.4)"])
 
 
 # ===========================================
-# Trade Endpoints
+# Trade Endpoints (specific routes BEFORE generic {trade_id})
 # ===========================================
+
+@router.get("/runs/{run_id}/trades/stats")
+async def get_trade_stats(run_id: str):
+    """
+    Get aggregate trade statistics.
+    
+    Includes win rate, profit factor, expectancy, etc.
+    """
+    stats = trade_normalizer_service.get_trade_stats(run_id)
+    
+    return {
+        "run_id": run_id,
+        "stats": stats.to_dict()
+    }
+
+
+@router.get("/runs/{run_id}/trades/summary")
+async def get_trade_summary(run_id: str):
+    """
+    Get full trade summary with stats and all trades.
+    """
+    summary = trade_normalizer_service.get_trade_summary(run_id)
+    return summary
+
+
+@router.post("/runs/{run_id}/trades/normalize")
+async def normalize_trades(
+    run_id: str,
+    close_open: bool = Query(True, description="Close open positions at final price")
+):
+    """
+    Trigger trade normalization.
+    
+    Reconstructs closed trades from fills.
+    Usually called automatically after simulation completes.
+    """
+    trades = trade_normalizer_service.normalize_from_broker(run_id, close_open)
+    
+    return {
+        "run_id": run_id,
+        "trades_normalized": len(trades),
+        "success": True
+    }
+
 
 @router.get("/runs/{run_id}/trades")
 async def get_trades(
@@ -55,21 +99,6 @@ async def get_trades(
     }
 
 
-@router.get("/runs/{run_id}/trades/stats")
-async def get_trade_stats(run_id: str):
-    """
-    Get aggregate trade statistics.
-    
-    Includes win rate, profit factor, expectancy, etc.
-    """
-    stats = trade_normalizer_service.get_trade_stats(run_id)
-    
-    return {
-        "run_id": run_id,
-        "stats": stats.to_dict()
-    }
-
-
 @router.get("/runs/{run_id}/trades/{trade_id}")
 async def get_trade(run_id: str, trade_id: str):
     """Get specific trade by ID"""
@@ -79,32 +108,3 @@ async def get_trade(run_id: str, trade_id: str):
         raise HTTPException(status_code=404, detail="Trade not found")
     
     return trade.to_dict()
-
-
-@router.post("/runs/{run_id}/trades/normalize")
-async def normalize_trades(
-    run_id: str,
-    close_open: bool = Query(True, description="Close open positions at final price")
-):
-    """
-    Trigger trade normalization.
-    
-    Reconstructs closed trades from fills.
-    Usually called automatically after simulation completes.
-    """
-    trades = trade_normalizer_service.normalize_from_broker(run_id, close_open)
-    
-    return {
-        "run_id": run_id,
-        "trades_normalized": len(trades),
-        "success": True
-    }
-
-
-@router.get("/runs/{run_id}/trades/summary")
-async def get_trade_summary(run_id: str):
-    """
-    Get full trade summary with stats and all trades.
-    """
-    summary = trade_normalizer_service.get_trade_summary(run_id)
-    return summary
