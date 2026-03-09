@@ -80,6 +80,18 @@ class EventType(str, Enum):
     EXPERIMENT_COMPLETED = "experiment_completed"
     EXPERIMENT_FAILED = "experiment_failed"
     
+    # Simulation events (S1)
+    SIMULATION_RUN_CREATED = "simulation_run_created"
+    SIMULATION_RUN_STARTED = "simulation_run_started"
+    SIMULATION_RUN_PAUSED = "simulation_run_paused"
+    SIMULATION_RUN_RESUMED = "simulation_run_resumed"
+    SIMULATION_RUN_COMPLETED = "simulation_run_completed"
+    SIMULATION_RUN_FAILED = "simulation_run_failed"
+    SIMULATION_REPLAY_STARTED = "simulation_replay_started"
+    SIMULATION_REPLAY_STEP = "simulation_replay_step"
+    SIMULATION_REPLAY_PAUSED = "simulation_replay_paused"
+    SIMULATION_REPLAY_FINISHED = "simulation_replay_finished"
+    
     # System events
     SYSTEM_STARTED = "system_started"
     SYSTEM_SHUTDOWN = "system_shutdown"
