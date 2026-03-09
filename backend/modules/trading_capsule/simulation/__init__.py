@@ -15,6 +15,12 @@ S1.2 - Market Replay Engine:
 - Step Orchestrator
 - Replay Driver
 
+S1.3 - Simulated Broker:
+- Fill Models (Instant, Slippage)
+- Fee Calculator
+- Order Management
+- Position Tracking
+
 Architecture:
     Market Replay → Strategy Runtime (T6) → Execution (T3) → Risk (T4) → OMS (T2) → Simulated Broker
 """
@@ -71,6 +77,16 @@ from .replay import (
     replay_driver_service
 )
 
+from .broker import (
+    SimulatedBrokerAdapter,
+    SimulatedBrokerService,
+    simulated_broker_service,
+    FillModel,
+    InstantFillModel,
+    SlippageFillModel,
+    FeeCalculator
+)
+
 from .simulation_engine import (
     SimulationEngine,
     simulation_engine
@@ -122,6 +138,15 @@ __all__ = [
     "step_orchestrator_service",
     "replay_driver_service",
     
+    # Broker (S1.3)
+    "SimulatedBrokerAdapter",
+    "SimulatedBrokerService",
+    "simulated_broker_service",
+    "FillModel",
+    "InstantFillModel",
+    "SlippageFillModel",
+    "FeeCalculator",
+    
     # Engine
     "SimulationEngine",
     "simulation_engine",
@@ -131,4 +156,4 @@ __all__ = [
 ]
 
 
-print("[Simulation] Module loaded - S1.1/S1.2 Ready")
+print("[Simulation] Module loaded - S1.1/S1.2/S1.3 Ready")
