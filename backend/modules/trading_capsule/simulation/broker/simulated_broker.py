@@ -309,7 +309,10 @@ class SimulatedBrokerAdapter:
                         low=current_price,
                         close=current_price
                     )
-                    self._try_fill_order(order, candle)
+                    fill = self._try_fill_order(order, candle)
+                    # Add filled order to closed orders
+                    if fill and order.status == "FILLED":
+                        self._account.closed_orders.append(order)
             else:
                 # Add to pending orders
                 self._account.open_orders[order.order_id] = order
