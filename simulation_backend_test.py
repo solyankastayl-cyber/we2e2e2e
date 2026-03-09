@@ -10,7 +10,7 @@ Tests all S1 Trading Simulation Engine endpoints:
 - State queries (state, positions, equity, fingerprint)
 - Capital profiles validation (MICRO=$100, SMALL=$1000, MEDIUM=$10000, LARGE=$100000)
 
-Backend URL: https://pattern-detector-9.preview.emergentagent.com
+Backend URL: https://market-replay-2.preview.emergentagent.com
 """
 
 import requests
@@ -21,7 +21,7 @@ from datetime import datetime
 from typing import Dict, Any, List, Optional
 
 class S1SimulationTester:
-    def __init__(self, base_url: str = "https://pattern-detector-9.preview.emergentagent.com"):
+    def __init__(self, base_url: str = "https://market-replay-2.preview.emergentagent.com"):
         self.base_url = base_url.rstrip('/')
         self.tests_run = 0
         self.tests_passed = 0

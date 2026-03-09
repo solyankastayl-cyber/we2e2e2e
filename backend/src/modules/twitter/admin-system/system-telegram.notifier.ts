@@ -7,7 +7,7 @@ import { sendTelegramMessage, TelegramConnectionModel } from '../../../core/noti
 const SYSTEM_BOT_CHAT_ID = process.env.TELEGRAM_SYSTEM_BOT_CHAT_ID || process.env.TELEGRAM_ADMIN_CHAT_ID || '';
 
 // Admin console base URL
-const ADMIN_URL = process.env.ADMIN_URL || 'https://risk-control-system.preview.emergentagent.com';
+const ADMIN_URL = process.env.ADMIN_URL || 'https://market-replay-2.preview.emergentagent.com';
 
 // Alert event types
 export enum SystemAlertEvent {

@@ -30,7 +30,7 @@ from datetime import datetime
 from typing import Dict, Any, List, Optional
 
 class TradeNormalizationTester:
-    def __init__(self, base_url="https://pattern-detector-9.preview.emergentagent.com"):
+    def __init__(self, base_url="https://market-replay-2.preview.emergentagent.com"):
         self.base_url = base_url
         self.tests_run = 0
         self.tests_passed = 0

@@ -6,7 +6,7 @@ S1.3 Simulated Broker Adapter - Enhanced Backend Test
 Enhanced test that also checks strategy configuration and tests
 different scenarios to ensure both buy and sell signals are generated.
 
-Backend URL: https://pattern-detector-9.preview.emergentagent.com
+Backend URL: https://market-replay-2.preview.emergentagent.com
 """
 
 import requests
@@ -17,7 +17,7 @@ from datetime import datetime
 from typing import Dict, Any, List, Optional
 
 class S13EnhancedTester:
-    def __init__(self, base_url: str = "https://pattern-detector-9.preview.emergentagent.com"):
+    def __init__(self, base_url: str = "https://market-replay-2.preview.emergentagent.com"):
         self.base_url = base_url.rstrip('/')
         self.tests_run = 0
         self.tests_passed = 0

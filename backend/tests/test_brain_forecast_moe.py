@@ -15,7 +15,7 @@ import time
 import math
 
 # API base URL from environment
-BASE_URL = os.environ.get('REACT_APP_BACKEND_URL', 'https://risk-control-system.preview.emergentagent.com').rstrip('/')
+BASE_URL = os.environ.get('REACT_APP_BACKEND_URL', 'https://market-replay-2.preview.emergentagent.com').rstrip('/')
 
 # Expected horizons
 HORIZONS = ['30D', '90D', '180D', '365D']
