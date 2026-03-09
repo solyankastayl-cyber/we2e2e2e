@@ -465,12 +465,29 @@ class SimulationEngine:
             from ..strategy import strategy_engine
             from ..strategy.strategy_types import SignalType
             
+            # Determine bias from candle (simple momentum)
+            candle = tick_event.candle
+            price_change = (candle.close - candle.open) / candle.open if candle.open > 0 else 0
+            
+            # Simple rules:
+            # - Bullish if close > open by more than 1%
+            # - Bearish if close < open by more than 1%
+            if price_change > 0.01:
+                bias = "BULLISH"
+                confidence = min(0.5 + abs(price_change) * 10, 0.95)  # Scale confidence
+            elif price_change < -0.01:
+                bias = "BEARISH"
+                confidence = min(0.5 + abs(price_change) * 10, 0.95)
+            else:
+                bias = "NEUTRAL"
+                confidence = 0.3
+            
             # Build signal from candle
             signal_data = {
                 "asset": tick_event.asset,
-                "bias": "NEUTRAL",  # Will be determined by strategy
-                "confidence": 0.5,
-                "price": tick_event.candle.close,
+                "bias": bias,
+                "confidence": confidence,
+                "price": candle.close,
                 "timestamp": tick_event.timestamp
             }
             
