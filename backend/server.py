@@ -449,11 +449,13 @@ try:
 except ImportError as e:
     print(f"[Routes] Broker Adapters router not available: {e}")
 
-# Trading Capsule Router (T0/T1)
+# Trading Capsule Router (T0-T6)
 try:
     from modules.trading_capsule.routes import router as trading_capsule_router
+    from modules.trading_capsule import initialize_default_strategies
     app.include_router(trading_capsule_router)
-    print("[Routes] Trading Capsule router registered (T0/T1)")
+    initialize_default_strategies()
+    print("[Routes] Trading Capsule router registered (T0-T6)")
 except ImportError as e:
     print(f"[Routes] Trading Capsule router not available: {e}")
 
